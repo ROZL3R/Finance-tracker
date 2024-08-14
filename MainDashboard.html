@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>My Money</title>
+</head>
+<body>
+    <div class="money-container">
+        <p class="money">Balance: $<span id="balance">0</span></p>
+        <button>Add Money to your Balance</button>
+    </div>
+    <ul id="expenses">
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+        <li></li>
+    </ul>
+    <button class="openExpenses-btn" id="openExpenses">Add Expense</button>
+    <div class="addExpense-container" id="addExpense-container">
+        <input type="text" placeholder="Add an expenses" id="expense-label">
+        <input type="number" placeholder="E.g $60" id="expense-cost">
+        <input type="date" id="expense-date">
+        <button class="addExpense-btn" id="addExpense-btn">Add</button>
+    </div>
+    <div class="addMoney-container" id="addMoney-container">
+        <input type="text" placeholder="Where did it come from?" id="addMoney-label">
+        <input type="number" placeholder="E.g $60" id="addMoney-amount">
+        <input type="date" id="addMoney-date">
+        <button class="addMoney-btn" id="addMoney-btn">Add</button>
+    </div>
+
+
+
+
+
+    <script src="/script.js"></script>
+</body>
+</html>
