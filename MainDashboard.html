@@ -7,31 +7,38 @@
     <title>My Money</title>
 </head>
 <body>
-    <div class="money-container">
-        <p class="money">Balance: $<span id="balance">0</span></p>
-        <button class="addMoney-btn" id="addMoney">Add Money to your Balance</button>
+    <div class="card">
+        <div class="container">
+            <header>
+                <h1>My Money</h1>
+                <p class="balance">Balance: $<span id="balance">0</span></p>
+            </header>
+            <main>
+                <div class="btn-container">
+                    <button id="addMoney" class="btn btn-primary">Add Money</button>
+                    <button id="openExpenses" class="btn btn-secondary">Add Expense</button>
+                </div>
+                <ul id="expenses"></ul>
+            </main>
+        </div>
     </div>
-    <ul id="expenses">
-    </ul>
-    <button class="openExpenses-btn" id="openExpenses">Add Expense</button>
 
-    <!-- Overlay for blurring the background -->
     <div id="overlay" class="overlay"></div>
 
-    <!-- Add Expense Popup -->
-    <div class="addExpense-container hidden" id="addExpense-container">
-        <input type="text" placeholder="Add an expenses" id="expense-label">
-        <input type="number" placeholder="E.g $60" id="expense-cost">
+    <div id="addExpense-container" class="modal hidden">
+        <h2>Add Expense</h2>
+        <input type="text" id="expense-label" placeholder="Expense description">
+        <input type="number" id="expense-cost" placeholder="Amount">
         <input type="date" id="expense-date">
-        <button class="addExpense-btn" id="addExpense-btn">Add</button>
+        <button id="addExpense-btn" class="btn btn-primary">Add Expense</button>
     </div>
 
-    <!-- Add Money Popup -->
-    <div class="addMoney-container hidden" id="addMoney-container">
-        <input type="text" placeholder="Where did it come from?" id="addMoney-label">
-        <input type="number" placeholder="E.g $60" id="addMoney-amount">
+    <div id="addMoney-container" class="modal hidden">
+        <h2>Add Money</h2>
+        <input type="text" id="addMoney-label" placeholder="Source">
+        <input type="number" id="addMoney-amount" placeholder="Amount">
         <input type="date" id="addMoney-date">
-        <button class="addMoney-btn" id="addMoney-btn">Add</button>
+        <button id="addMoney-btn" class="btn btn-primary">Add Money</button>
     </div>
 
     <script src="/script.js"></script>
