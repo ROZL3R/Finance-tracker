@@ -5,21 +5,54 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <title>My Money</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://kit.fontawesome.com/your-fontawesome-kit.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <div class="card">
-        <div class="container">
-            <header>
-                <h1>My Money</h1>
-                <p class="balance">Balance: $<span id="balance">0</span></p>
-            </header>
-            <main>
-                <div class="btn-container">
-                    <button id="addMoney" class="btn btn-primary">Add Money</button>
-                    <button id="openExpenses" class="btn btn-secondary">Add Expense</button>
+    <nav class="top-nav">
+        <div class="nav-content">
+            <h1>My Money</h1>
+            <ul>
+                <li><a href="#dashboard">Dashboard</a></li>
+                <li><a href="#transactions">Transactions</a></li>
+                <li><a href="#reports">Reports</a></li>
+                <li><a href="#settings">Settings</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="main-container">
+        <aside class="side-menu">
+            <ul>
+                <li><a href="#overview"><i class="fas fa-chart-line"></i> Overview</a></li>
+                <li><a href="#income"><i class="fas fa-money-bill-wave"></i> Income</a></li>
+                <li><a href="#expenses"><i class="fas fa-receipt"></i> Expenses</a></li>
+                <li><a href="#budget"><i class="fas fa-piggy-bank"></i> Budget</a></li>
+                <li><a href="#goals"><i class="fas fa-bullseye"></i> Goals</a></li>
+            </ul>
+        </aside>
+
+        <div class="content">
+            <div class="dashboard-layout">
+                <div class="chart-container">
+                    <canvas id="balanceChart"></canvas>
                 </div>
-                <ul id="expenses"></ul>
-            </main>
+                <div class="card">
+                    <div class="container">
+                        <header>
+                            <h1>My Money</h1>
+                            <p class="balance">Balance: $<span id="balance">0</span></p>
+                        </header>
+                        <main>
+                            <div class="btn-container">
+                                <button id="addMoney" class="btn btn-primary">Add Money</button>
+                                <button id="openExpenses" class="btn btn-secondary">Add Expense</button>
+                            </div>
+                            <ul id="expenses"></ul>
+                        </main>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

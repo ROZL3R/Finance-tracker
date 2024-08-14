@@ -1,3 +1,4 @@
+// Select DOM elements
 const balance = document.getElementById('balance');
 const expenses = document.getElementById('expenses');
 const openExpensesBtn = document.getElementById('openExpenses');
@@ -14,33 +15,36 @@ const addMoneyDate = document.getElementById('addMoney-date');
 const addMoneyBtn = document.getElementById('addMoney-btn');
 const overlay = document.getElementById('overlay');
 
-let currentBalance = 0
+let currentBalance = 0;
 
+// Arrays to store expenses and money added
+let expenseList = [];
+let moneyList = [];
+
+// Function to add money to the balance
 const addMoneyToBalance = (input) => {
-    const moneyInput = Number(input)
-    return currentBalance += moneyInput
-}
+    const moneyInput = Number(input);
+    return currentBalance += moneyInput;
+};
 
+// Function to remove money from the balance
 const removeMoneyFromBalance = (input) => {
-    const moneyInput = Number(input)
-    return currentBalance -= moneyInput
-}
+    const moneyInput = Number(input);
+    return currentBalance -= moneyInput;
+};
 
+// Function to add new money to the list and update the chart
 const addNewMoneyToList = () => {
-    // Create a new list item
     const li = document.createElement('li');
-    
-    // Get the values from the input fields
     const textValue = addMoneyLabel.value.trim();
     const dateValue = addMoneyDate.value.trim();
     const moneyValue = addMoneyAmount.value.trim();
 
     if (!textValue || !dateValue || !moneyValue) {
-        alert('Please fill out all fields.')
-        return
+        alert('Please fill out all fields.');
+        return;
     }
 
-    // Create span elements with CSS classes
     const textSpan = document.createElement('span');
     textSpan.textContent = `Label: ${textValue} `;
     textSpan.classList.add('text-label');
@@ -53,35 +57,30 @@ const addNewMoneyToList = () => {
     moneySpan.textContent = `+ ${moneyValue}`;
     moneySpan.classList.add('money-label');
 
-    // Append the styled spans to the list item
     li.append(textSpan, dateSpan, moneySpan);
-
-    // Append the list item to the expenses list
     expenses.appendChild(li);
 
-    // Reset the input fields
     addMoneyLabel.value = '';
     addMoneyDate.value = '';
     addMoneyAmount.value = '';
 
-    return li; 
-}
+    moneyList.push({ label: textValue, date: dateValue, amount: moneyValue });
+    updateChart();
+    return li;
+};
 
+// Function to add expenses to the list and update the chart
 const addExpensesToList = () => {
-    // Create a new list item
     const li = document.createElement('li');
-    
-    // Get the values from the input fields
     const textValue = addExpensesLabel.value.trim();
     const dateValue = addExpenseDate.value.trim();
     const moneyValue = addExpenseCost.value.trim();
 
     if (!textValue || !dateValue || !moneyValue) {
-        alert('Please fill out all fields.')
-        return
+        alert('Please fill out all fields.');
+        return;
     }
 
-    // Create span elements with CSS classes
     const textSpan = document.createElement('span');
     textSpan.textContent = `Label: ${textValue} `;
     textSpan.classList.add('text-label');
@@ -94,30 +93,31 @@ const addExpensesToList = () => {
     moneySpan.textContent = `- ${moneyValue}`;
     moneySpan.classList.add('money-expense-label');
 
-    // Append the styled spans to the list item
     li.append(textSpan, dateSpan, moneySpan);
-
-    // Append the list item to the expenses list
     expenses.appendChild(li);
 
-    // Reset the input fields
     addExpensesLabel.value = '';
     addExpenseCost.value = '';
     addExpenseDate.value = '';
 
-    return li; 
-}
+    expenseList.push({ label: textValue, date: dateValue, amount: moneyValue });
+    updateChart();
+    return li;
+};
 
+// Function to show popup
 const showPopup = (popupElement) => {
     popupElement.classList.remove('hidden');
     overlay.style.display = 'block';
-}
+};
 
+// Function to hide popup
 const hidePopup = (popupElement) => {
     popupElement.classList.add('hidden');
     overlay.style.display = 'none';
-}
+};
 
+// Event listeners for buttons
 openExpensesBtn.addEventListener('click', () => {
     showPopup(addExpenseContainer);
 });
@@ -142,3 +142,96 @@ overlay.addEventListener('click', () => {
     hidePopup(addExpenseContainer);
     hidePopup(addMoneyContainer);
 });
+
+// Initialize Chart.js donut chart
+const ctx = document.getElementById('balanceChart').getContext('2d');
+const balanceChart = new Chart(ctx, {
+    type: 'doughnut',
+    data: {
+        labels: ['Expenses', 'Money Added'],
+        datasets: [{
+            data: [0, 0],
+            backgroundColor: [
+                'rgb(237, 0, 28)',
+                'rgb(0, 237, 40)',
+            ],
+            borderColor: 'transparent',
+            hoverOffset: 2
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        cutout: '50%',
+        plugins: {
+            legend: {
+                position: 'bottom',
+                labels: {
+                    color: 'white'
+                }
+            },
+            title: {
+                display: true,
+                text: 'Balance Overview',
+                color: 'white'
+            }
+        }
+    }
+});
+
+// Function to update the chart
+const updateChart = (startDate = null, endDate = null) => {
+    let totalExpenses = 0;
+    let totalAddedMoney = 0;
+
+    // Filter data based on date
+    expenseList.forEach(item => {
+        if ((!startDate && !endDate) || (new Date(item.date) >= new Date(startDate) && new Date(item.date) <= new Date(endDate))) {
+            totalExpenses += Number(item.amount);
+        }
+    });
+
+    moneyList.forEach(item => {
+        if ((!startDate && !endDate) || (new Date(item.date) >= new Date(startDate) && new Date(item.date) <= new Date(endDate))) {
+            totalAddedMoney += Number(item.amount);
+        }
+    });
+
+    balanceChart.data.datasets[0].data = [totalExpenses, totalAddedMoney];
+    balanceChart.update();
+};
+
+// Add date filtering options
+const filterSelect = document.createElement('select');
+filterSelect.innerHTML = `
+    <option value="all">All Time</option>
+    <option value="week">Last Week</option>
+    <option value="month">Last Month</option>
+    <option value="year">Last Year</option>
+`;
+filterSelect.addEventListener('change', () => {
+    const today = new Date();
+    let startDate, endDate;
+
+    switch (filterSelect.value) {
+        case 'week':
+            startDate = new Date(today.setDate(today.getDate() - 7)).toISOString().split('T')[0];
+            endDate = new Date().toISOString().split('T')[0];
+            break;
+        case 'month':
+            startDate = new Date(today.setMonth(today.getMonth() - 1)).toISOString().split('T')[0];
+            endDate = new Date().toISOString().split('T')[0];
+            break;
+        case 'year':
+            startDate = new Date(today.setFullYear(today.getFullYear() - 1)).toISOString().split('T')[0];
+            endDate = new Date().toISOString().split('T')[0];
+            break;
+        default:
+            startDate = null;
+            endDate = null;
+    }
+    updateChart(startDate, endDate);
+});
+
+// Append filter to the document
+document.body.insertBefore(filterSelect, document.getElementById('balanceChart'));
